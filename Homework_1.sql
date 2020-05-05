@@ -39,7 +39,61 @@ GROUP BY home_team_api_id))
 
 
 /*-----3------*/
-							       						      
+							       
+select s.team_long_name, j1.player_name as p1,
+j2.player_name as p2,
+j3.player_name as p3,
+j4.player_name as p4,
+j5.player_name as p5,
+j6.player_name as p6,
+j7.player_name as p7,
+j8.player_name as p8,
+j9.player_name as p9,
+j10.player_name as p10,
+j11.player_name as p11
+from
+(select t.team_long_name,
+		m.home_player_1 as p1,
+		m.home_player_2 as p2,
+	     m.home_player_3 as p3,
+	     m.home_player_4 as p4,
+		 m.home_player_5 as p5,
+         m.home_player_6 as p6,
+         m.home_player_7 as p7,
+         m.home_player_8 as p8,
+         m.home_player_9 as p9,
+         m.home_player_10 as p10,
+         m.home_player_11 as p11
+from matches m
+join team t
+on t.team_api_id = m.home_team_api_id
+where m.season = '2008/2009' and m.league_id = 10257
+group by home_team_api_id) s
+join player j1
+on j1.player_api_id = s.p1
+join player j2 
+on j2.player_api_id = s.p2
+join player j3
+on j3.player_api_id = s.p3
+join player j4
+on j4.player_api_id = s.p4
+join player j5
+on j5.player_api_id = s.p5
+join player j6
+on j6.player_api_id = s.p6
+join player j7
+on j7.player_api_id = s.p7
+join player j8
+on j8.player_api_id = s.p8
+join player j9
+on j9.player_api_id = s.p9
+join player j10
+on j10.player_api_id = s.p10
+join player j11
+on j11.player_api_id = s.p11;
+							       
+/*-----4-----*/
+							       
 /* Climate influence */
 
 /* We want to know if the climate influnces the capacity to make goal.*/
@@ -65,7 +119,7 @@ on s.league_id = l.country_id;
 /* after we join the table s 'season' with the name of the league to have the name insted of the league_id. */
 
 
-/*-----4-----*/
+/*-----5-----*/
 
 /* RELEGATION */
 
@@ -92,7 +146,7 @@ WHERE m.COUNTRY_ID = 10257
 group by t.team_long_name;
 
 
-/*---------5--------*/
+/*---------6--------*/
 					    
 					    
 /* Serie a Rank for the seson 2008/2009 */
@@ -142,7 +196,7 @@ order by punti desc;
 /* The same thing for the away points and after we join home points with away points to obtain a complete rank. */
 
 
-/*-------6------*/
+/*-------7------*/
 					    
 					    
 /* Team confirmation */
@@ -188,7 +242,7 @@ on sa.home_team_api_id = a.team_api_id and sa.season = a.season
 order by team_long_name,season;
 
 
-/*------7------*/
+/*------8------*/
 					    
 /* New stars */
 
@@ -203,7 +257,7 @@ Group by player_name
 ORDER BY overall_rating desc
 
 
-/*--------8--------*/
+/*--------9--------*/
 					       
 /* Who is the best goalkeeper? */
 
@@ -232,7 +286,7 @@ on gk_2.home_team_api_id = t.team_api_id
 order by gk_reflexes desc,team_long_name;
 
 					       
-/*-------9-------*/
+/*-------10-------*/
 					       
 					       
 /* Fifa Rating */
@@ -258,7 +312,7 @@ WHERE pa.player_api_id=p.player_api_id AND p.player_api_id = home_player_11
 
 					       
 					       
-/*-------10-------*/
+/*-------11-------*/
 					       
 					       
 /* The Best betting */
