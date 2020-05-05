@@ -206,8 +206,8 @@ order by punti desc;
 
 /* We create 2 View Serie_A and Attributi */
 	
-create view SerieA_team as
-select t.team_long_name,s.season,s.home_team_api_id
+select sa.team_long_name,sa.season,round(a.t_attributes,2) from
+(select t.team_long_name,s.season,s.home_team_api_id
 from
 (select m.season,m.home_team_api_id
 from matches m 
@@ -215,13 +215,8 @@ where m.league_id = '10257') s
 join team t
 on t.team_api_id = s.home_team_api_id
 group by season,team_long_name
-order by team_long_name,season;
-/* Serie A that have the season and the name of the team */
-
-create view attributi as
-select ta.team_api_id,(ta.BuildUpPlaySpeedClass + ta.buildupplaydribbling + ta.buildupplaypassing + ta.chancecreationpassing + 
-		       ta.chancecreationcrossing + ta.chancecreationshooting + ta.defencepressure + ta.defenceaggression + 
-		       ta.defenceteamwidthclass)/9 as t_attributes,
+order by team_long_name,season) sa
+join (select ta.team_api_id,(ta.BuildUpPlaySpeedClass + ta.buildupplaydribbling + ta.buildupplaypassing + ta.chancecreationpassing + ta.chancecreationcrossing + ta.chancecreationshooting + ta.defencepressure + ta.defenceaggression + ta.defenceteamwidthclass)/9 as t_attributes,
 (case 
 	when ta.date like '2010-02%' then '2009/2010' 
 	when ta.date like '2014-09%' then '2014/2015'
@@ -230,18 +225,9 @@ select ta.team_api_id,(ta.BuildUpPlaySpeedClass + ta.buildupplaydribbling + ta.b
 	when ta.date like '2012-02%' then '2011/2012'
 	when ta.date like '2013-09%' then '2013/2014'
 end) as season 
-from team_attributes ta;
-
-/* the View Attributi instead has the team_api_id and the average of the teams skills. The case select the season we have a gap 
-for the season 2012/2013 beacause the 
-statistcs there aren't in our dataset for the team.*/
-
-select sa.team_long_name,a.season,round(a.t_attributes,2) as team_skills
-from SerieA_team sa
-join attributi a
+from team_attributes ta) a
 on sa.home_team_api_id = a.team_api_id and sa.season = a.season
 order by team_long_name,season;
-
 
 /*------8------*/
 					    
