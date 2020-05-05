@@ -39,7 +39,8 @@ GROUP BY home_team_api_id))
 
 
 /*-----3------*/
-							       
+
+/*Lineup SerieA teams */
 select s.team_long_name, j1.player_name as p1,
 j2.player_name as p2,
 j3.player_name as p3,
