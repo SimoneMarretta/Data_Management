@@ -203,8 +203,6 @@ order by punti desc;
 /* Team confirmation */
 
 /* With this query we want to know if a team in terms of team_skills is improved or got worse.*/ 
-
-/* We create 2 View Serie_A and Attributi */
 	
 select sa.team_long_name,sa.season,round(a.t_attributes,2) from
 (select t.team_long_name,s.season,s.home_team_api_id
