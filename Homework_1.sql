@@ -1,5 +1,5 @@
 
-                                                /*-----1-----*/
+/*-----1-----*/
 						
 						
 /* Premier League Goal */
@@ -18,7 +18,7 @@ group by m.away_team_api_id) AS home_away_table
 GROUP BY team_long_name
 ORDER BY SUM(TOTAL) DESC
 
-				/*-----2------*/
+/*-----2------*/
 				
 				
 /* HEIGHT-WEIGHT */
@@ -38,7 +38,8 @@ WHERE season = '2008/2009'
 GROUP BY home_team_api_id))
 
 
-					/*-----3------*/
+/*-----3------*/
+							       						      
 /* Climate influence */
 
 /* We want to know if the climate influnces the capacity to make goal.*/
@@ -63,7 +64,8 @@ on s.league_id = l.country_id;
 
 /* after we join the table s 'season' with the name of the league to have the name insted of the league_id. */
 
-					/*-----4-----*/
+
+/*-----4-----*/
 
 /* RELEGATION */
 
@@ -89,8 +91,8 @@ on m.home_team_api_id = t.team_api_id
 WHERE m.COUNTRY_ID = 10257
 group by t.team_long_name;
 
-					    
-					         /*---------5--------*/
+
+/*---------5--------*/
 					    
 					    
 /* Serie a Rank for the seson 2008/2009 */
@@ -140,7 +142,7 @@ order by punti desc;
 /* The same thing for the away points and after we join home points with away points to obtain a complete rank. */
 
 
-					    		/*-------6------*/
+/*-------6------*/
 					    
 					    
 /* Team confirmation */
@@ -186,7 +188,8 @@ on sa.home_team_api_id = a.team_api_id and sa.season = a.season
 order by team_long_name,season;
 
 
-					    /*------7------*/
+/*------7------*/
+					    
 /* New stars */
 
 /* #We retrieve the players with overall rating > 70 and age < 35
@@ -200,7 +203,8 @@ Group by player_name
 ORDER BY overall_rating desc
 
 
-					       /*--------8--------*/
+/*--------8--------*/
+					       
 /* Who is the best goalkeeper? */
 
 /* This query return to us the ranking of goalkeeper and his team */
@@ -228,7 +232,7 @@ on gk_2.home_team_api_id = t.team_api_id
 order by gk_reflexes desc,team_long_name;
 
 					       
-					       /*-------9-------*/
+/*-------9-------*/
 					       
 					       
 /* Fifa Rating */
@@ -254,7 +258,7 @@ WHERE pa.player_api_id=p.player_api_id AND p.player_api_id = home_player_11
 
 					       
 					       
-					       /*-------10-------*/
+/*-------10-------*/
 					       
 					       
 /* The Best betting */
