@@ -17,7 +17,8 @@ ORDER BY SUM(TOTAL) DESC
 
 
 /* HEIGHT-WEIGHT */
-/* # We retrieved the player that has the maximum difference between his height and his weight between those players that have played as a striker in the season = '2008/2009' */
+/* # We retrieved the player that has the maximum difference between his height and his weight between those players that 
+have played as a striker in the season = '2008/2009' */
 
 SELECT DISTINCT player_name,ABS(HEIGHT-WEIGHT)
 FROM PLAYER p,PLAYER_ATTRIBUTES pa
@@ -37,7 +38,8 @@ GROUP BY home_team_api_id))
 /* We want to know if the climate influnces the capacity to make goal.*/
 	
 select l.name,s.goal,s.tot_matches,s.gol_x_matches,s.climate from
-(select m.league_id,sum(m.home_team_goal)+sum(m.away_team_goal) as goal,count(m.id) as tot_matches,(sum(m.home_team_goal)+sum(m.away_team_goal))/count(m.id) as gol_x_matches,
+(select m.league_id,sum(m.home_team_goal)+sum(m.away_team_goal) as goal,count(m.id) as tot_matches,
+ (sum(m.home_team_goal)+sum(m.away_team_goal))/count(m.id) as gol_x_matches,
 case
 	when date like '____%-10-%' or date like '____%-11-%' or date like  '____%-12-%' or date like '____%-01-%' or date like '____%-02-%' then 'winter' 
     else 'summer'
@@ -105,7 +107,8 @@ group by t.team_long_name
 order by goal_scored desc,goal_conceded asc) h
 
 /* group by and order by are not neccessary, but i've used during programming for helping me for visualize how the results.
-	inside the case we compare the home team goals with the away team goals, if the home team goals > away team goals so 3 points....
+	inside the case we compare the home team goals with the away team goals, if the home team goals > away team goals so 3 
+	points....
 */
 
 join 
@@ -146,7 +149,9 @@ order by team_long_name,season;
 /* Serie A that have the season and the name of the team */
 
 create view attributi as
-select ta.team_api_id,(ta.BuildUpPlaySpeedClass + ta.buildupplaydribbling + ta.buildupplaypassing + ta.chancecreationpassing + ta.chancecreationcrossing + ta.chancecreationshooting + ta.defencepressure + ta.defenceaggression + ta.defenceteamwidthclass)/9 as t_attributes,
+select ta.team_api_id,(ta.BuildUpPlaySpeedClass + ta.buildupplaydribbling + ta.buildupplaypassing + ta.chancecreationpassing + 
+		       ta.chancecreationcrossing + ta.chancecreationshooting + ta.defencepressure + ta.defenceaggression + 
+		       ta.defenceteamwidthclass)/9 as t_attributes,
 (case 
 	when ta.date like '2010-02%' then '2009/2010' 
 	when ta.date like '2014-09%' then '2014/2015'
@@ -157,7 +162,8 @@ select ta.team_api_id,(ta.BuildUpPlaySpeedClass + ta.buildupplaydribbling + ta.b
 end) as season 
 from team_attributes ta;
 
-/* the View Attributi instead has the team_api_id and the average of the teams skills. The case select the season we have a gap for the season 2012/2013 beacause the 
+/* the View Attributi instead has the team_api_id and the average of the teams skills. The case select the season we have a gap 
+for the season 2012/2013 beacause the 
 statistcs there aren't in our dataset for the team.*/
 
 select sa.team_long_name,a.season,round(a.t_attributes,2) as team_skills
