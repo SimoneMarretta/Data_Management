@@ -1,5 +1,3 @@
-
-
 1)select p.player_name,gk.total 
 from
 (select h.home_player_1,h.total + a.total as total
