@@ -1,6 +1,4 @@
-ALTER TABLE `MATCHES` ADD INDEX `matches_idx_season_home_id_away_id` (`season`,`home_team_api_id`,`away_team_api_id`);
-ALTER TABLE `player` ADD INDEX `player_idx_player_id` (`player_api_id`);
-ALTER TABLE `player_attributes` ADD INDEX `player_attributes_idx_player_id` (`player_api_id`);
+
 
 1)select p.player_name,gk.total 
 from
