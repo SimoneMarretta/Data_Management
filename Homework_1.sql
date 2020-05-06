@@ -228,7 +228,23 @@ on sa.home_team_api_id = a.team_api_id and sa.season = a.season
 order by team_long_name,season;
 
 /*------8------*/
-					    
+					   
+/* Goalkeeper Presence */
+select gk.player_name,gk.presence
+from 
+(select p.player_name,sum(case
+when p.player_api_id = m.home_player_1 then 1
+when p.player_api_id = m.away_player_1 then 1
+else 0
+end) as presence
+from player p,matches m
+where m.league_id = 10257 and m.season = '2008/2009'
+group by p.player_name) gk
+where gk.presence>1
+order by gk.presence desc,player_name;
+
+/*-----9-----*/
+    
 /* New stars */
 
 /* #We retrieve the players with overall rating > 70 and age < 35
@@ -242,7 +258,7 @@ Group by player_name
 ORDER BY overall_rating desc
 
 
-/*--------9--------*/
+/*--------10--------*/
 					       
 /* Who is the best goalkeeper? */
 
@@ -271,7 +287,7 @@ on gk_2.home_team_api_id = t.team_api_id
 order by gk_reflexes desc,team_long_name;
 
 					       
-/*-------10-------*/
+/*-------11-------*/
 					       
 					       
 /* Fifa Rating */
@@ -297,7 +313,7 @@ WHERE pa.player_api_id=p.player_api_id AND p.player_api_id = home_player_11
 
 					       
 					       
-/*-------11-------*/
+/*-------12-------*/
 					       
 					       
 /* The Best betting */
@@ -327,3 +343,5 @@ on ti.team_api_id = b.away_team_api_id
 order by outcome desc;
 
 /* At the end we orderd by outcome so to have the higher quotations that was really happen */
+									  
+
