@@ -67,8 +67,26 @@ order by punti desc;
 
 /* The same thing for the away points and after we join home points with away points to obtain a complete rank. */
 
-			
-/*-----3------*/
+/*--------3-------*/
+
+/* HEIGHT-WEIGHT */
+/* # We retrieved the player that has the maximum difference between his height and his weight between those players that 
+have played as a striker in the season = '2008/2009' */
+
+SELECT DISTINCT player_name,ABS(HEIGHT-WEIGHT)
+FROM PLAYER p
+WHERE p.player_api_id IN (SELECT home_player_11
+FROM MATCHES m
+WHERE season = '2008/2009'
+GROUP BY home_team_api_id) AND ABS(height-weight)=(SELECT MAX(ABS(HEIGHT-WEIGHT)) AS difference
+FROM PLAYER p
+WHERE  p.player_api_id IN (SELECT home_player_11
+FROM MATCHES m
+WHERE season = '2008/2009'
+GROUP BY home_team_api_id))
+			   
+			   
+/*-----4------*/
 
 /*Lineup SerieA teams */
 select s.team_long_name, j1.player_name as p1,
@@ -123,7 +141,7 @@ on j10.player_api_id = s.p10
 join player j11
 on j11.player_api_id = s.p11;
 							       
-/*-----4-----*/
+/*-----5-----*/
 							       
 /* Climate influence */
 
@@ -150,7 +168,7 @@ on s.league_id = l.country_id;
 /* after we join the table s 'season' with the name of the league to have the name insted of the league_id. */
 
 
-/*-----5-----*/
+/*-----6-----*/
 
 /* RELEGATION */
 
@@ -176,25 +194,6 @@ on m.home_team_api_id = t.team_api_id
 WHERE m.COUNTRY_ID = 10257
 group by t.team_long_name;
 
-
-/*-------6------*/
-
-				
-/* HEIGHT-WEIGHT */
-/* # We retrieved the player that has the maximum difference between his height and his weight between those players that 
-have played as a striker in the season = '2008/2009' */
-
-SELECT DISTINCT player_name,ABS(HEIGHT-WEIGHT)
-FROM PLAYER p,PLAYER_ATTRIBUTES pa
-WHERE p.player_api_id=pa.player_api_id AND p.player_api_id IN (SELECT home_player_11
-FROM MATCHES m
-WHERE season = '2008/2009'
-GROUP BY home_team_api_id) AND ABS(height-weight)=(SELECT MAX(ABS(HEIGHT-WEIGHT)) AS difference
-FROM PLAYER p,PLAYER_ATTRIBUTES pa
-WHERE p.player_api_id=pa.player_api_id AND p.player_api_id IN (SELECT home_player_11
-FROM MATCHES m
-WHERE season = '2008/2009'
-GROUP BY home_team_api_id))
 							  
 /*-------7--------*/
 							       
