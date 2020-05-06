@@ -18,26 +18,56 @@ group by m.away_team_api_id) AS home_away_table
 GROUP BY team_long_name
 ORDER BY SUM(TOTAL) DESC
 
-/*-----2------*/
-				
-				
-/* HEIGHT-WEIGHT */
-/* # We retrieved the player that has the maximum difference between his height and his weight between those players that 
-have played as a striker in the season = '2008/2009' */
+/*---------2--------*/
+					    
+					    
+/* Serie a Rank for the seson 2008/2009 */
 
-SELECT DISTINCT player_name,ABS(HEIGHT-WEIGHT)
-FROM PLAYER p,PLAYER_ATTRIBUTES pa
-WHERE p.player_api_id=pa.player_api_id AND p.player_api_id IN (SELECT home_player_11
-FROM MATCHES m
-WHERE season = '2008/2009'
-GROUP BY home_team_api_id) AND ABS(height-weight)=(SELECT MAX(ABS(HEIGHT-WEIGHT)) AS difference
-FROM PLAYER p,PLAYER_ATTRIBUTES pa
-WHERE p.player_api_id=pa.player_api_id AND p.player_api_id IN (SELECT home_player_11
-FROM MATCHES m
-WHERE season = '2008/2009'
-GROUP BY home_team_api_id))
+/* We want to select the final Rank of the season 2008/2009 we like to visualize also the total number of goal
+conceded and the total number of goal scored. */
 
+/* We have to divide this selection in 2 part: the first one is for the points earned in the home field, the second
+part is for the points earned away. The two part have the name 'h' and 'a' respectively for 'home' and 'away'.*/
 
+select h.team_long_name,h.punti + a.punti as punti,
+h.goal_conceded + a.goal_conceded as goal_conceded,h.goal_scored + a.goal_scored as goal_scored from
+(select distinct(t.team_long_name),sum(m.home_team_goal) as goal_scored,sum(m.away_team_goal) as goal_conceded,sum(
+case 
+	when m.home_team_goal > m.away_team_goal then 3
+    when m.home_team_goal < m.away_team_goal then 0
+    else 1
+end) as punti 
+from team t 
+join matches m
+on m.home_team_api_id = t.team_api_id
+WHERE m.COUNTRY_ID = 10257 and m.season = '2008/2009'
+group by t.team_long_name
+order by goal_scored desc,goal_conceded asc) h
+
+/* group by and order by are not neccessary, but i've used during programming for helping me for visualize how the results.
+	inside the case we compare the home team goals with the away team goals, if the home team goals > away team goals so 3 
+	points....
+*/
+
+join 
+(select distinct(t.team_long_name),sum(m.home_team_goal) as goal_scored,sum(m.away_team_goal) as goal_conceded,sum(
+case 
+	when m.home_team_goal < m.away_team_goal then 3
+    when m.home_team_goal > m.away_team_goal then 0
+		else 1
+end) as punti 
+from team t 
+join matches m
+on m.away_team_api_id = t.team_api_id
+WHERE m.COUNTRY_ID = 10257 and m.season = '2008/2009'
+group by t.team_long_name
+order by goal_scored desc,goal_conceded asc) a
+on h.team_long_name = a.team_long_name
+order by punti desc;
+
+/* The same thing for the away points and after we join home points with away points to obtain a complete rank. */
+
+			
 /*-----3------*/
 
 /*Lineup SerieA teams */
@@ -147,59 +177,27 @@ WHERE m.COUNTRY_ID = 10257
 group by t.team_long_name;
 
 
-/*---------6--------*/
-					    
-					    
-/* Serie a Rank for the seson 2008/2009 */
+/*-------6------*/
 
-/* We want to select the final Rank of the season 2008/2009 we like to visualize also the total number of goal
-conceded and the total number of goal scored. */
+				
+/* HEIGHT-WEIGHT */
+/* # We retrieved the player that has the maximum difference between his height and his weight between those players that 
+have played as a striker in the season = '2008/2009' */
 
-/* We have to divide this selection in 2 part: the first one is for the points earned in the home field, the second
-part is for the points earned away. The two part have the name 'h' and 'a' respectively for 'home' and 'away'.*/
-
-select h.team_long_name,h.punti + a.punti as punti,
-h.goal_conceded + a.goal_conceded as goal_conceded,h.goal_scored + a.goal_scored as goal_scored from
-(select distinct(t.team_long_name),sum(m.home_team_goal) as goal_scored,sum(m.away_team_goal) as goal_conceded,sum(
-case 
-	when m.home_team_goal > m.away_team_goal then 3
-    when m.home_team_goal < m.away_team_goal then 0
-    else 1
-end) as punti 
-from team t 
-join matches m
-on m.home_team_api_id = t.team_api_id
-WHERE m.COUNTRY_ID = 10257 and m.season = '2008/2009'
-group by t.team_long_name
-order by goal_scored desc,goal_conceded asc) h
-
-/* group by and order by are not neccessary, but i've used during programming for helping me for visualize how the results.
-	inside the case we compare the home team goals with the away team goals, if the home team goals > away team goals so 3 
-	points....
-*/
-
-join 
-(select distinct(t.team_long_name),sum(m.home_team_goal) as goal_scored,sum(m.away_team_goal) as goal_conceded,sum(
-case 
-	when m.home_team_goal < m.away_team_goal then 3
-    when m.home_team_goal > m.away_team_goal then 0
-		else 1
-end) as punti 
-from team t 
-join matches m
-on m.away_team_api_id = t.team_api_id
-WHERE m.COUNTRY_ID = 10257 and m.season = '2008/2009'
-group by t.team_long_name
-order by goal_scored desc,goal_conceded asc) a
-on h.team_long_name = a.team_long_name
-order by punti desc;
-
-/* The same thing for the away points and after we join home points with away points to obtain a complete rank. */
-
-
-/*-------7------*/
-					    
-					    
+SELECT DISTINCT player_name,ABS(HEIGHT-WEIGHT)
+FROM PLAYER p,PLAYER_ATTRIBUTES pa
+WHERE p.player_api_id=pa.player_api_id AND p.player_api_id IN (SELECT home_player_11
+FROM MATCHES m
+WHERE season = '2008/2009'
+GROUP BY home_team_api_id) AND ABS(height-weight)=(SELECT MAX(ABS(HEIGHT-WEIGHT)) AS difference
+FROM PLAYER p,PLAYER_ATTRIBUTES pa
+WHERE p.player_api_id=pa.player_api_id AND p.player_api_id IN (SELECT home_player_11
+FROM MATCHES m
+WHERE season = '2008/2009'
+GROUP BY home_team_api_id))
+							  
+/*-------7--------*/
+							       
 /* Team confirmation */
 
 /* With this query we want to know if a team in terms of team_skills is improved or got worse.*/ 
